@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <rect width="64" height="64" rx="8" fill="#0F1115"/>
+  <path d="M8 44h48" stroke="#FF6B00" stroke-width="3"/>
+  <circle cx="22" cy="44" r="4" fill="#FF6B00"/>
+  <circle cx="42" cy="44" r="4" fill="none" stroke="#E0E0E0" stroke-width="2"/>
+  <text x="8" y="28" fill="#E0E0E0" font-family="Arial,sans-serif" font-size="16" font-weight="700">РСИ</text>
+</svg>
