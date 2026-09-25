@@ -14,7 +14,8 @@
   --max: 1180px;
 }
 * { box-sizing: border-box; }
-html { scroll-behavior: smooth; overflow-x: hidden; }
+html { scroll-behavior: smooth; }
+body { overflow-x: hidden; }
 body {
   margin: 0;
   background: var(--bg);
@@ -55,7 +56,17 @@ button, input, textarea { font: inherit; color: inherit; }
 .ticker-track {
   display: flex;
   width: max-content;
+  will-change: transform;
   animation: tick 46s linear infinite;
+  -webkit-animation: tick 46s linear infinite;
+}
+@keyframes tick {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(-50%, 0, 0); }
+}
+@-webkit-keyframes tick {
+  from { -webkit-transform: translate3d(0, 0, 0); }
+  to { -webkit-transform: translate3d(-50%, 0, 0); }
 }
 .ticker span {
   font-family: var(--mono);
@@ -69,7 +80,7 @@ button, input, textarea { font: inherit; color: inherit; }
 .ticker { height: 42px; }
 .site-header { top: 42px; }
 .ticker b { color: var(--accent); font-weight: 400; }
-@keyframes tick { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+@keyframes tick { from { transform: translate3d(0, 0, 0); } to { transform: translate3d(-50%, 0, 0); } }
 .site-header {
   position: sticky;
   top: 42px;
@@ -587,8 +598,4 @@ dialog h3 { font-family: var(--display); margin: 8px 0; }
   .hero .lead { font-size: 18px; }
   .stats, .methods { grid-template-columns: 1fr; }
   dl { grid-template-columns: 1fr; }
-}
-@media (prefers-reduced-motion: reduce) {
-  .ticker-track, .plan, .reveal, body::before, .frame img { animation: none; }
-  .reveal { opacity: 1; transform: none; }
 }
