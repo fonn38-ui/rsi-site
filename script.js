@@ -173,21 +173,37 @@
         note.textContent = "Укажите имя и телефон — иначе заявку некому вернуть.";
         return;
       }
-      var files = picked.map(function (f) { return f.name; }).join(", ");
-      var body = [
-        "Заявка с локального сайта ООО «РСИ»",
-        "Имя: " + name,
-        "Телефон: " + phone,
-        "Комментарий: " + (comment || "—"),
-        "Файлы к письму: " + (files || "не выбраны"),
-      ].join("\n");
-      var href = "mailto:fonn@list.ru?subject=" + encodeURIComponent("Расчёт сметы — " + name)
-        + "&body=" + encodeURIComponent(body);
+      var data = new FormData();
+      data.append("name", name);
+      data.append("phone", phone);
+      data.append("comment", comment || "—");
+      data.append("_subject", "Расчёт сметы — " + name);
+      data.append("_captcha", "false");
+      data.append("_template", "table");
+      picked.forEach(function (file) {
+        data.append("attachment", file, file.name);
+      });
+      var btn = form.querySelector("button[type=submit]");
+      btn.disabled = true;
       note.hidden = false;
-      note.textContent = files
-        ? "Откроется почта. Прикрепите выбранные файлы к письму."
-        : "Откроется почта с текстом заявки. Если окно не появилось, напишите на fonn@list.ru.";
-      window.location.href = href;
+      note.textContent = "Отправляем заявку…";
+      fetch("https://formsubmit.co/ajax/fonn@list.ru", {
+        method: "POST",
+        body: data,
+        headers: { Accept: "application/json" }
+      }).then(function (res) {
+        return res.json().then(function (body) {
+          if (!res.ok) throw new Error((body && body.message) || "Не отправилось");
+          note.textContent = "Заявка отправлена. Мы свяжемся с вами.";
+          form.reset();
+          picked = [];
+          renderFiles();
+        });
+      }).catch(function () {
+        note.textContent = "Не удалось отправить. Проверьте интернет и попробуйте ещё раз.";
+      }).finally(function () {
+        btn.disabled = false;
+      });
     });
   }
 
